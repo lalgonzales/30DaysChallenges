@@ -1,5 +1,5 @@
 ---
-title: "Where Honduras' pine is harvested"
+title: "Where Honduras' pine harvest is authorized"
 subtitle: "#30DayMapChallenge 2026 · Day 4 · Clusters"
 author: "Luis Alfredo López Gonzales"
 date: 2026-11-04
@@ -18,16 +18,16 @@ jupyter:
     name: python3
 ---
 
-# Where Honduras' pine is harvested
+# Where Honduras' pine harvest is authorized
 
 A forest **operating plan** (*plan operativo anual*, POA) is the permit to harvest
 one area of a forest management plan in a given year. ICF, the national forest
 authority, publishes the approved POAs as a public map layer [@icf-planes-operativos],
 and the department boundaries on the same server [@icf-limite-departamentos].
 
-The question for today's theme: **does the authorized harvest spread across the
-pine forest, or does it gather in a few places?** The answer is the second, and
-this notebook measures how much.
+The question for today's theme: **does the authorized harvest spread out, or
+does it gather in a few zones?** The answer is the second, and this notebook
+shows where those zones are and how many of the plans each one gathers.
 
 ```python
 import geopandas as gpd
@@ -57,16 +57,9 @@ print(f"{len(raw):,} POA polygons, {raw.fech_apro.min()} to {raw.fech_apro.max()
 
 ## Transform: one row per plan
 
-Two things in the raw layer would bias the totals:
-
-1. **Repeated plans.** A few `cod_poa` codes appear more than once: the same plan
-   split into several polygons, each carrying the plan's full volume. Summing them
-   would count that volume twice. They are merged into one plan, keeping the
-   largest volume reported.
-2. **Implausible volume per hectare.** A handful of plans report hundreds or
-   thousands of m³/ha, most likely a polygon digitized smaller than the real
-   area. Their volume stays (it comes from the plan, not the polygon), and they
-   are only flagged.
+A few `cod_poa` codes appear more than once: the same plan in several polygons.
+Left as they are, that plan would count more than once, so its polygons are
+merged into one plan. That is the only change to the data.
 
 ```python
 raw["geometry"] = raw.geometry.make_valid()
@@ -76,8 +69,6 @@ print(f"{raw[repeated].cod_poa.nunique()} codes repeated in {repeated.sum()} pol
 poa = raw.dissolve(
     by="cod_poa",
     aggfunc={
-        "volu_total": "max",
-        "arb_cortar": "max",
         "fech_apro": "first",
         "depto": "first",
         "tipo_bosq": "first",
@@ -86,16 +77,8 @@ poa = raw.dissolve(
         "tene_naci": "first",
     },
 ).reset_index()
-poa["area_ha"] = poa.area / 10_000
 poa["year"] = pd.to_datetime(poa.fech_apro).dt.year
-poa["m3_ha"] = poa.volu_total / poa.area_ha
-
-flagged = poa.m3_ha > 150
-print(
-    f"{len(poa):,} plans; {flagged.sum()} flagged above 150 m³/ha "
-    f"({poa.loc[flagged, 'volu_total'].sum():,.0f} m³ kept)"
-)
-print(f"Total authorized volume: {poa.volu_total.sum():,.0f} m³")
+print(f"{len(poa):,} plans")
 ```
 
 ## A quick profile
@@ -112,8 +95,7 @@ print((tenure * 100).round(1).to_string())
 print("\nForest type:")
 print(poa.tipo_bosq.value_counts().to_string())
 
-profile = poa.groupby("year").agg(plans=("cod_poa", "size"), m3=("volu_total", "sum"))
-profile
+poa.groupby("year").size().rename("plans").to_frame().T
 ```
 
 Almost every plan is in **pine** forest and on **private** land. The years
@@ -138,82 +120,60 @@ print(f"{poa.cluster.max() + 1} clusters, {(poa.cluster < 0).sum()} plans outsid
 
 ## How concentrated is the harvest?
 
-A cluster's footprint is the **concave hull** of its plans: the tightest outline
-around them, which follows the shape of the group better than a convex hull.
-Footprint is compared with the land area of Honduras (the department layer).
+Each cluster is measured by its number of plans, and its share by those plans
+over all plans. On the map, a cluster is drawn as the **concave hull** of its
+plans: the tightest outline around them, labelled with the department where
+most of its plans are.
 
 ```python
-country_ha = departments.area.sum() / 10_000
-total_m3 = poa.volu_total.sum()
-
 clusters = (
     poa[poa.cluster >= 0]
     .dissolve(
         by="cluster",
         aggfunc={
             "cod_poa": "size",
-            "volu_total": "sum",
             "depto": lambda s: s.mode()[0],
         },
     )
-    .rename(columns={"cod_poa": "plans", "volu_total": "m3", "depto": "department"})
+    .rename(columns={"cod_poa": "plans", "depto": "department"})
 )
 clusters["geometry"] = clusters.geometry.concave_hull(ratio=0.3)
-clusters["area_share"] = clusters.area / 10_000 / country_ha
-clusters["volume_share"] = clusters.m3 / total_m3
-clusters = clusters.sort_values("m3", ascending=False)
+clusters["plan_share"] = clusters.plans / len(poa)
+clusters = clusters.sort_values("plans", ascending=False, kind="stable")
 clusters["rank"] = range(1, len(clusters) + 1)
 
 TOP = 5
 top = clusters.head(TOP)
-headline = (
-    f"{TOP} hotspots, {top.area_share.sum():.1%} of the country, "
-    f"{top.volume_share.sum():.0%} of the authorized pine volume"
-)
-print(headline)
 print(
-    f"All {len(clusters)} clusters: {clusters.area_share.sum():.1%} of the land, "
-    f"{clusters.volume_share.sum():.0%} of the volume"
+    f"{TOP} zones: {top.plans.sum()} of {len(poa):,} plans ({top.plan_share.sum():.0%})"
 )
-clusters[["rank", "department", "plans", "m3", "area_share", "volume_share"]].round(3)
+print(f"All {len(clusters)} clusters: {clusters.plan_share.sum():.0%} of the plans")
+clusters[["rank", "department", "plans", "plan_share"]].round(3)
 ```
 
 ### Does the finding depend on the parameter?
 
 A result that only holds for one setting is not a result. The same measure with
-smaller and larger clusters, and with both hull types:
+smaller and larger clusters:
 
 ```python
 rows = []
 for size in (10, 20, 40):
     labels = HDBSCAN(min_cluster_size=size, copy=True).fit_predict(points)
-    grouped = poa.assign(c=labels)[labels >= 0].dissolve(
-        by="c", aggfunc={"volu_total": "sum"}
+    plans = pd.Series(labels[labels >= 0]).value_counts()
+    rows.append(
+        {
+            "min_cluster_size": size,
+            "clusters": len(plans),
+            f"top {TOP} plan share": plans.nlargest(TOP).sum() / len(poa),
+        }
     )
-    for hull in ("convex", "concave"):
-        shape = (
-            grouped.convex_hull if hull == "convex" else grouped.concave_hull(ratio=0.3)
-        )
-        order = grouped.volu_total.sort_values(ascending=False).index[:TOP]
-        rows.append(
-            {
-                "min_cluster_size": size,
-                "hull": hull,
-                "clusters": len(grouped),
-                f"top {TOP} land share": shape.loc[order].area.sum()
-                / 10_000
-                / country_ha,
-                f"top {TOP} volume share": grouped.volu_total.loc[order].sum()
-                / total_m3,
-            }
-        )
 pd.DataFrame(rows).round(3)
 ```
 
-With 10 or 20 plans per cluster the picture holds: the five largest hotspots
-cover 2 to 3.5% of the land and hold a third to two fifths of the volume
-(figures as of 2026-11-04). At 40 the clusters merge into a few regional blobs
-and stop being hotspots, so 20 is the setting used.
+With 10 or 20 plans per cluster the picture holds: the five largest zones gather
+35 to 40% of the plans (figures as of 2026-11-04). At 40 the clusters
+merge into a few regional blobs and stop being zones, so 20 is the setting used.
 
 ## The map
 
@@ -224,44 +184,42 @@ INK, INK_2, MUTED = "#0b0b0b", "#52514e", "#a3a29c"
 SURFACE, LAND, EDGE = "#fcfcfb", "#ecebe7", "#fcfcfb"
 HOT, OTHER = "#104281", "#86b6ef"
 
-top_area, top_volume = top.area_share.sum(), top.volume_share.sum()
+top_share = top.plan_share.sum()
 first_year, others = poa.year.min(), len(clusters) - TOP
 TEXT = {
     "en": {
-        "title": f"{TOP} hotspots, {top_area:.1%} of the country, "
-        f"{top_volume:.0%} of the authorized pine volume",
+        "title": f"{TOP} zones gather {top_share:.0%} of the approved pine harvest plans",
         "subtitle": f"Clusters of approved forest operating plans (POA), {first_year}–2026. "
-        f"Number = share of all authorized volume ({total_m3 / 1e6:.2f} M m³).",
-        "top": f"Top {TOP} hotspots",
+        f"Number = plans in the zone, out of {len(poa):,}.",
+        "top": f"Top {TOP} zones",
         "other": f"Other clusters ({others})",
         "outside": "Plans outside clusters",
-        "credits": "Data: ICF, GeoServer icfpub (planes_operativos_gp, limite_departamentos_gp), "
-        "accessed 2026-11-04 · HDBSCAN (min. 20 plans), concave hulls\n"
+        "credits": "Data: ICF, GeoServer icfpub (planes_operativos_gp, "
+        "limite_departamentos_gp), accessed 2026-11-04 · HDBSCAN (min. 20 plans), concave hulls\n"
         "Map: Luis Alfredo López Gonzales · #30DayMapChallenge Day 4 · "
         "Made in Python with AI help",
     },
     "es": {
-        "title": f"{TOP} focos, {top_area:.1%} del país, "
-        f"{top_volume:.0%} del volumen de pino autorizado",
+        "title": f"{TOP} zonas reúnen el {top_share:.0%} de los planes de aprovechamiento de pino",
         "subtitle": f"Agrupaciones de planes operativos (POA) aprobados, {first_year}–2026. "
-        f"Número = porcentaje del volumen autorizado total ({total_m3 / 1e6:.2f} M m³).",
-        "top": f"{TOP} focos principales",
+        f"Número = planes en la zona, de {len(poa):,}.",
+        "top": f"{TOP} zonas principales",
         "other": f"Otras agrupaciones ({others})",
         "outside": "Planes fuera de agrupaciones",
-        "credits": "Datos: ICF, GeoServer icfpub (planes_operativos_gp, limite_departamentos_gp), "
-        "consultado 2026-11-04 · HDBSCAN (mín. 20 planes), envolventes cóncavas\n"
+        "credits": "Datos: ICF, GeoServer icfpub (planes_operativos_gp, "
+        "limite_departamentos_gp), consultado 2026-11-04 · HDBSCAN (mín. 20 planes), envolventes cóncavas\n"
         "Mapa: Luis Alfredo López Gonzales · #30DayMapChallenge Día 4 · "
         "Hecho en Python con ayuda de IA",
     },
 }
 
-# Label side per hotspot rank, set by eye for the data of 2026-11-04 so the
+# Label side per zone rank, set by eye for the data of 2026-11-04 so the
 # central labels don't cross; any other rank goes to the right.
-LABEL_SIDE = {1: "left", 4: "top"}
+LABEL_SIDE = {1: "left", 5: "top"}
 
 
 def draw_map(lang: str) -> plt.Figure:
-    """Draw the hotspot map with its text in `lang` ("en" or "es")."""
+    """Draw the zone map with its text in `lang` ("en" or "es")."""
     text = TEXT[lang]
     fig, ax = plt.subplots(figsize=(12, 8), facecolor=SURFACE)
     ax.set_facecolor(SURFACE)
@@ -281,7 +239,7 @@ def draw_map(lang: str) -> plt.Figure:
             "top": (((minx + maxx) / 2, maxy), (0, 6), "center", "bottom"),
         }[side]
         ax.annotate(
-            f"{row.volume_share:.0%}  {row.department}",
+            f"{row.plans}  {row.department}",
             xy=xy,
             xytext=offset,
             textcoords="offset points",
@@ -293,19 +251,46 @@ def draw_map(lang: str) -> plt.Figure:
             path_effects=[patheffects.withStroke(linewidth=3, foreground=SURFACE)],
         )
 
-    ax.text(0.0, 1.06, text["title"], transform=ax.transAxes,
-            fontsize=17, fontweight="bold", color=INK)
-    ax.text(0.0, 1.015, text["subtitle"], transform=ax.transAxes, fontsize=10.5, color=INK_2)
+    ax.text(
+        0.0,
+        1.06,
+        text["title"],
+        transform=ax.transAxes,
+        fontsize=17,
+        fontweight="bold",
+        color=INK,
+    )
+    ax.text(
+        0.0, 1.015, text["subtitle"], transform=ax.transAxes, fontsize=10.5, color=INK_2
+    )
 
     handles = [
         plt.Line2D([], [], marker="s", ls="", ms=10, color=HOT, label=text["top"]),
-        plt.Line2D([], [], marker="s", ls="", ms=10, color=OTHER, alpha=0.55,
-                   label=text["other"]),
+        plt.Line2D(
+            [],
+            [],
+            marker="s",
+            ls="",
+            ms=10,
+            color=OTHER,
+            alpha=0.55,
+            label=text["other"],
+        ),
         plt.Line2D([], [], marker="o", ls="", ms=4, color=MUTED, label=text["outside"]),
     ]
-    ax.legend(handles=handles, loc="lower left", frameon=False, fontsize=10, labelcolor=INK_2)
-    ax.text(1.0, -0.04, text["credits"], transform=ax.transAxes,
-            ha="right", va="top", fontsize=8, color=INK_2)
+    ax.legend(
+        handles=handles, loc="lower left", frameon=False, fontsize=10, labelcolor=INK_2
+    )
+    ax.text(
+        1.0,
+        -0.04,
+        text["credits"],
+        transform=ax.transAxes,
+        ha="right",
+        va="top",
+        fontsize=8,
+        color=INK_2,
+    )
 
     ax.set_axis_off()
     ax.set_aspect("equal")
@@ -314,20 +299,24 @@ def draw_map(lang: str) -> plt.Figure:
 
 for lang in TEXT:
     fig = draw_map(lang)
-    fig.savefig(f"day04-clusters-{lang}.png", dpi=200, bbox_inches="tight", facecolor=SURFACE)
+    fig.savefig(
+        f"day04-clusters-{lang}.png", dpi=200, bbox_inches="tight", facecolor=SURFACE
+    )
 plt.show()
 ```
 
 ## What this map does not say
 
-- **Approved, not harvested.** A POA authorizes a volume; how much was actually
-  cut is not in this layer.
+- **Approved, not harvested.** A POA authorizes a harvest; how much was actually
+  cut is not in this layer. Plans differ in size, so a count of plans is not a
+  measure of volume.
 - **Published, not all.** These are the plans on ICF's public GeoServer as of
   2026-11-04; plans missing from it are missing here. 2026 is a partial year.
 - **No plan is singled out.** The map shows groups, not owners or sites; the
-  layer's site and tenure fields are only used in aggregate.
-- **The footprint is a model.** Hull area depends on the hull and the parameter;
-  the sensitivity table above shows the range.
+  layer's site and tenure fields are only used in aggregate, and volume is not
+  used.
+- **The outlines are drawings.** A zone's outline only wraps its plans; it is
+  not the area harvested.
 
 ## References
 
