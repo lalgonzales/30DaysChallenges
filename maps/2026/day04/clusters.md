@@ -52,14 +52,15 @@ def read_layer(name: str) -> gpd.GeoDataFrame:
 
 raw = read_layer("planes_operativos_gp")
 departments = read_layer("limite_departamentos_gp")
-print(f"{len(raw):,} POA polygons, {raw.fech_apro.min()} to {raw.fech_apro.max()}")
+dates = pd.to_datetime(raw.fech_apro)
+print(f"{len(raw):,} POA polygons, {dates.min():%d/%m/%Y} to {dates.max():%d/%m/%Y}")
 ```
 
 ## Transform: one row per plan
 
 A few `cod_poa` codes appear more than once: the same plan in several polygons.
 Left as they are, that plan would count more than once, so its polygons are
-merged into one plan. That is the only change to the data.
+merged into one plan.
 
 ```python
 raw["geometry"] = raw.geometry.make_valid()
@@ -118,12 +119,11 @@ poa["cluster"] = HDBSCAN(min_cluster_size=MIN_CLUSTER, copy=True).fit_predict(po
 print(f"{poa.cluster.max() + 1} clusters, {(poa.cluster < 0).sum()} plans outside them")
 ```
 
-## How concentrated is the harvest?
+## How concentrated are the plans?
 
-Each cluster is measured by its number of plans, and its share by those plans
-over all plans. On the map, a cluster is drawn as the **concave hull** of its
-plans: the tightest outline around them, labelled with the department where
-most of its plans are.
+Each cluster counts its plans, and its share is that count over all plans. On
+the map, a cluster is drawn as the **concave hull** of its plans: the tightest
+outline around them, labelled with the department where most of its plans are.
 
 ```python
 clusters = (
@@ -304,19 +304,6 @@ for lang in TEXT:
     )
 plt.show()
 ```
-
-## What this map does not say
-
-- **Approved, not harvested.** A POA authorizes a harvest; how much was actually
-  cut is not in this layer. Plans differ in size, so a count of plans is not a
-  measure of volume.
-- **Published, not all.** These are the plans on ICF's public GeoServer as of
-  2026-11-04; plans missing from it are missing here. 2026 is a partial year.
-- **No plan is singled out.** The map shows groups, not owners or sites; the
-  layer's site and tenure fields are only used in aggregate, and volume is not
-  used.
-- **The outlines are drawings.** A zone's outline only wraps its plans; it is
-  not the area harvested.
 
 ## References
 
