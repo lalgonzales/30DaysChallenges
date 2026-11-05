@@ -35,7 +35,9 @@ def main() -> int:
         return 0
     for source in sources:
         print(f"Building {source.relative_to(ROOT)} -> .ipynb")
-        subprocess.run(["jupytext", "--update", "--to", "ipynb", str(source)], check=True)
+        subprocess.run(
+            ["jupytext", "--update", "--to", "ipynb", str(source)], check=True
+        )
     return 0
 
 
