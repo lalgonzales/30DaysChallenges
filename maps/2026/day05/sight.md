@@ -35,6 +35,7 @@ installed on the system.
 
 ```python
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -46,6 +47,9 @@ import numpy as np
 import pandas as pd
 import rasterio
 from rasterio.features import rasterize
+
+sys.path.append("../..")  # maps/, for the shared scale bar and north arrow
+from cartography import add_north_arrow, add_scale_bar
 
 WFS = "https://geoserver.icf.gob.hn/icfpub/wfs"
 CRS = 32616  # WGS 84 / UTM zone 16N, the ICF layers' own CRS, in metres
@@ -322,6 +326,8 @@ def draw_map(lang: str) -> plt.Figure:
     ax.set_ylim(ylim)
     ax.set_axis_off()
     ax.set_aspect("equal")
+    add_scale_bar(ax, loc="lower left", color=INK, background=SURFACE)
+    add_north_arrow(ax, xy=(0.05, 0.9), color=INK, halo=SURFACE)
     return fig
 
 
