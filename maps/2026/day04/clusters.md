@@ -30,12 +30,17 @@ does it gather in a few zones?** The answer is the second, and this notebook
 shows where those zones are and how many of the plans each one gathers.
 
 ```python
+import sys
+
 import geopandas as gpd
 import matplotlib.pyplot as plt
 from matplotlib import patheffects
 import numpy as np
 import pandas as pd
 from sklearn.cluster import HDBSCAN
+
+sys.path.append("../..")  # maps/, for the shared scale bar and north arrow
+from cartography import add_north_arrow, add_scale_bar
 
 WFS = "https://geoserver.icf.gob.hn/icfpub/wfs"
 CRS = 32616  # WGS 84 / UTM zone 16N, the layer's own CRS, in metres
@@ -294,6 +299,8 @@ def draw_map(lang: str) -> plt.Figure:
 
     ax.set_axis_off()
     ax.set_aspect("equal")
+    add_scale_bar(ax, loc="lower right", color=INK_2)
+    add_north_arrow(ax, xy=(0.97, 0.88), color=INK_2)
     return fig
 
 
