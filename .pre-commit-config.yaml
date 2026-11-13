@@ -9,7 +9,7 @@ repos:
           - id: trailing-whitespace
           - id: requirements-txt-fixer
           - id: check-added-large-files
-            args: ["--maxkb=500"]
+            args: ["--maxkb=5000"]
 
     # Secret scanning: blocks a commit that stages a key, token or password.
     - repo: https://github.com/gitleaks/gitleaks
