@@ -3,6 +3,7 @@ title: "If the pasture turned back into forest"
 subtitle: "#30DayMapChallenge 2026 · Day 8 · Utopia"
 author: "Luis Alfredo López Gonzales"
 date: 2026-11-08
+image: day08-utopia-en.png
 bibliography: ../../../references.bib
 jupyter:
   jupytext:

@@ -1,0 +1,53 @@
+project:
+  type: website
+  output-dir: _site
+  # Only the notebooks (and day 7's page): their jupytext .md pairs stay out.
+  render:
+    - index.qmd
+    - maps/2026/*/*.ipynb
+    - maps/2026/day07/index.qmd
+    - chart/2025/day08/hist.ipynb
+    - chart/2025/day11/stripes.ipynb
+    - chart/2025/day24/who_data.ipynb
+  resources:
+    - maps/2026/*/*.html
+
+execute:
+  enabled: false # outputs are kept in the notebooks
+
+website:
+  title: "30 Days Challenges"
+  description: "Maps and charts with Honduran data, one a day."
+  site-url: https://lalgonzales.github.io/30DaysChallenges/
+  repo-url: https://github.com/lalgonzales/30DaysChallenges
+  page-navigation: true
+  back-to-top-navigation: true
+  navbar:
+    left:
+      - text: "Maps 2026"
+        href: index.qmd#maps-2026
+      - text: "Charts 2025"
+        href: index.qmd#charts-2025
+    right:
+      - icon: github
+        href: https://github.com/lalgonzales/30DaysChallenges
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    include-in-header:
+      text: |
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-TN3D6RFJ');</script>
+        <!-- End Google Tag Manager -->
+    include-before-body:
+      text: |
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TN3D6RFJ"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
