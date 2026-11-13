@@ -3,6 +3,7 @@ title: "A park within a ten-minute walk"
 subtitle: "#30DayMapChallenge 2026 · Day 10 · Prompting only"
 author: "Claude Code, from a prompt by Luis Alfredo López Gonzales"
 date: 2026-11-10
+image: day10-prompting-only-en.png
 bibliography: ../../../references.bib
 jupyter:
   jupytext:

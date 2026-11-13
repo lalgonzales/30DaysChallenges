@@ -3,6 +3,7 @@ title: "Homes that cook with firewood"
 subtitle: "#30DayMapChallenge 2026 · Day 12 · Power"
 author: "Luis Alfredo López Gonzales"
 date: 2026-11-12
+image: day12-power-en.png
 bibliography: ../../../references.bib
 jupyter:
   jupytext:

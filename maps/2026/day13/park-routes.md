@@ -3,6 +3,7 @@ title: "The walk to the nearest park"
 subtitle: "#30DayMapChallenge 2026 · Day 13 · Interactions"
 author: "Luis Alfredo López Gonzales"
 date: 2026-11-13
+image: day13-interactions-en.png
 bibliography: ../../../references.bib
 jupyter:
   jupytext:
@@ -24,6 +25,10 @@ Today's theme is interactions. This is the day 10 map of Tegucigalpa, how far
 each home is from a park on foot, made into a web map you can interact with:
 click any home and the map draws the walk along the streets to its nearest
 park, with the minutes it takes and the park's name.
+
+<iframe src="day13-interactions-en.html" width="100%" height="600" style="border:0"></iframe>
+
+[Open the map full screen](day13-interactions-en.html) · [en español](day13-interactions-es.html)
 
 The method is the one of day 10. Parks, streets and footpaths, and the city's
 boundary come from OpenStreetMap [@openstreetmap], read from the Geofabrik

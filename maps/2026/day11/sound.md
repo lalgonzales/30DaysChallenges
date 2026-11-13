@@ -3,6 +3,7 @@ title: "The protected areas that can already be heard"
 subtitle: "#30DayMapChallenge 2026 · Day 11 · Senses: Sound"
 author: "Luis Alfredo López Gonzales"
 date: 2026-11-11
+image: day11-sound-en.png
 bibliography: ../../../references.bib
 jupyter:
   jupytext:
