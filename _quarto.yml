@@ -20,6 +20,8 @@ website:
   description: "Maps and charts with Honduran data, one a day."
   site-url: https://lalgonzales.github.io/30DaysChallenges/
   repo-url: https://github.com/lalgonzales/30DaysChallenges
+  repo-branch: main
+  repo-actions: [source]
   page-navigation: true
   back-to-top-navigation: true
   navbar:
