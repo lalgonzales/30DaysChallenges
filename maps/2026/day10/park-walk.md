@@ -40,6 +40,7 @@ WorldPop's 2025 population estimate [@worldpop-r2025a], a 100 m grid that
 spreads each census area's people over its built-up pixels.
 
 ```python
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -420,6 +421,8 @@ for lang in ("en", "es"):
     fig = draw_map(lang)
     fig.savefig(f"day10-prompting-only-{lang}.png", dpi=200, facecolor=BG)
     plt.close(fig)
+
+shutil.rmtree(work)  # the downloaded OSM extract and WorldPop raster
 ```
 
 ![A park within a ten-minute walk](day10-prompting-only-en.png)

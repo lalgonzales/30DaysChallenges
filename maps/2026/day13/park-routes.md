@@ -39,6 +39,7 @@ ground.
 
 ```python
 import json
+import shutil
 import subprocess
 import tempfile
 from pathlib import Path
@@ -436,6 +437,8 @@ for lang in ("en", "es"):
     web_map(lang).save(f"day13-interactions-{lang}.html")
     size = Path(f"day13-interactions-{lang}.html").stat().st_size / 1e6
     print(f"day13-interactions-{lang}.html: {size:.1f} MB")
+
+shutil.rmtree(work)  # the downloaded OSM extract and WorldPop raster
 ```
 
 The map opens in a browser: [English](day13-interactions-en.html) ·
