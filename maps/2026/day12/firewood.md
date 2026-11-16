@@ -28,7 +28,7 @@ many dwellings that share stands for.
 
 The figures come from the municipal volumes of the XVII Population and VI
 Housing Census 2013 published by INE, table 12 (*Viviendas particulares
-ocupadas, por energía utilizada para cocinar*). The municipal boundaries are
+ocupadas, por energía utilizada para cocinar*) [@ine-censo-2013]. The municipal boundaries are
 ICF's layer [@icf-limite-municipios], from the ICF GeoServer [@icf-geoserver].
 
 ```python
@@ -454,3 +454,8 @@ for lang in ("en", "es"):
 ```
 
 ![Homes that cook with firewood](day12-power-en.png)
+
+## References
+
+::: {#refs}
+:::
