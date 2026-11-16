@@ -3,6 +3,7 @@ title: "If the pasture turned back into forest"
 subtitle: "#30DayMapChallenge 2026 · Day 8 · Utopia"
 author: "Luis Alfredo López Gonzales"
 date: 2026-11-08
+image: day08-utopia-en.png
 bibliography: ../../../references.bib
 jupyter:
   jupytext:
@@ -39,6 +40,7 @@ The country's outline comes from ICF's departments layer
 
 ```python
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -413,6 +415,8 @@ for lang in ("en", "es"):
     fig = draw_map(lang)
     fig.savefig(f"day08-utopia-{lang}.png", dpi=200, facecolor=BG)
     plt.close(fig)
+
+shutil.rmtree(work)  # the downloaded rasters
 ```
 
 ![If the pasture turned back into forest](day08-utopia-en.png)

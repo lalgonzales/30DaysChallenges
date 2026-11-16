@@ -3,6 +3,7 @@ title: "Where Honduras' pine harvest is authorized"
 subtitle: "#30DayMapChallenge 2026 · Day 4 · Clusters"
 author: "Luis Alfredo López Gonzales"
 date: 2026-11-04
+image: day04-clusters-en.png
 bibliography: ../../../references.bib
 jupyter:
   jupytext:

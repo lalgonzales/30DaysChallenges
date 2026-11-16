@@ -1,0 +1,34 @@
+---
+title: "30 Days Challenges"
+toc: false
+listing:
+  - id: maps-2026
+    contents:
+      - maps/2026/*/*.ipynb
+      - maps/2026/day07/index.qmd
+    type: grid
+    sort: date desc
+    fields: [image, title, subtitle, date]
+    image-height: 180px
+  - id: charts-2025
+    contents:
+      - chart/2025/day08/hist.ipynb
+      - chart/2025/day11/stripes.ipynb
+      - chart/2025/day24/who_data.ipynb
+    type: grid
+    sort: date desc
+    fields: [image, title, subtitle, date]
+    image-height: 180px
+---
+
+Maps and charts with Honduran data, made for the [#30DayMapChallenge](https://30daymapchallenge.com/) (November) and the [#30DayChartChallenge](https://30daychartchallenge.org/) (April). Each page is the notebook behind the map or chart, with its sources.
+
+## Maps 2026
+
+::: {#maps-2026}
+:::
+
+## Charts 2025
+
+::: {#charts-2025}
+:::

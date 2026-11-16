@@ -1,0 +1,11 @@
+---
+title: "The UNACIFOR school forest in ten minutes"
+subtitle: "#30DayMapChallenge 2026 · Day 7 · A map made in 10 minutes"
+author: "Luis Alfredo López Gonzales"
+date: 2026-11-07
+image: day07-10minutos-es.png
+---
+
+![](day07-10minutos-es.png)
+
+Made in QGIS in ten minutes; the project file is `day07-10minutosmap.qgz` in [this folder](https://github.com/lalgonzales/30DaysChallenges/tree/main/maps/2026/day07).

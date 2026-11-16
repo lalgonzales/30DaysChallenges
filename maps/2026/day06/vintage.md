@@ -3,6 +3,7 @@ title: "Thirty protected areas in a single day"
 subtitle: "#30DayMapChallenge 2026 · Day 6 · Vintage"
 author: "Luis Alfredo López Gonzales"
 date: 2026-11-06
+image: day06-vintage-en.png
 bibliography: ../../../references.bib
 jupyter:
   jupytext:

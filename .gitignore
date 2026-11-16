@@ -175,3 +175,12 @@ cython_debug/
 
 # Other folders
 private/
+
+# Day 12: INE census volumes (PDF cache)
+maps/2026/day12/tomos
+
+# Quarto site
+/_site/
+/.quarto/
+
+**/*.quarto_ipynb

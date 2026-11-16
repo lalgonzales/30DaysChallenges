@@ -3,6 +3,7 @@ title: "How much of La Tigra can Tegucigalpa see?"
 subtitle: "#30DayMapChallenge 2026 · Day 5 · Senses: Sight"
 author: "Luis Alfredo López Gonzales"
 date: 2026-11-05
+image: day05-sight-en.png
 bibliography: ../../../references.bib
 jupyter:
   jupytext:
