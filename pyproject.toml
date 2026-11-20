@@ -7,6 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "geemap>=0.35.3",
     "geopandas>=1.0.1",
+    "h3>=4.5.1",
     "leafmap>=0.43.5",
     "localtileserver>=0.10.6",
     "matplotlib>=3.10.1",
