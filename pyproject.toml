@@ -25,3 +25,4 @@ dev = [
     "ipykernel>=7.4.0",
     "jupytext>=1.19.6",
 ]
+

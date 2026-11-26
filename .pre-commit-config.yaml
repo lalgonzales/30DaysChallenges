@@ -10,6 +10,7 @@ repos:
           - id: requirements-txt-fixer
           - id: check-added-large-files
             args: ["--maxkb=5000"]
+          - id: check-merge-conflict
 
     # Secret scanning: blocks a commit that stages a key, token or password.
     - repo: https://github.com/gitleaks/gitleaks
@@ -17,10 +18,13 @@ repos:
       hooks:
           - id: gitleaks
 
-    - repo: https://github.com/psf/black-pre-commit-mirror
-      rev: 26.10.1
+    - repo: https://github.com/astral-sh/ruff-pre-commit
+      rev: v0.17.6
       hooks:
-          - id: black-jupyter
+          - id: ruff-check
+            types_or: [python, pyi, jupyter, pyproject]
+            args: [--fix]
+          - id: ruff-format
 
     - repo: https://github.com/codespell-project/codespell
       rev: v2.4.3
@@ -38,3 +42,9 @@ repos:
           - id: nbstripout
             # maps/ notebooks are published with their outputs (map and tables)
             exclude: ^maps/
+
+    # uv project: keep uv.lock in step with pyproject.toml.
+    - repo: https://github.com/astral-sh/uv-pre-commit
+      rev: 0.13.10
+      hooks:
+          - id: uv-lock

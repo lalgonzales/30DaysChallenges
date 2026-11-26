@@ -21,32 +21,42 @@ PHRASES = {  # checked first, as substrings
 WORDS = [  # (family, keywords), first match wins
     (
         "Floral",
-        "floral flower blossom jasmine jazmin rose chamomile lavender lavendar "
-        "hibiscus roselle elderflower violet lilac honeysuckle geranium magnolia acacia tea tizana",
+        (
+            "floral flower blossom jasmine jazmin rose chamomile lavender lavendar "
+            "hibiscus roselle elderflower violet lilac honeysuckle geranium magnolia acacia tea tizana"
+        ),
     ),
     (
         "Fruity: berry",
-        "berry berries strawberry stawberry fresa raspberry rasberry blueberry "  # codespell:ignore stawberry,rasberry
-        "blackberry mora cranberry currant boysenberry mulberry gooseberry bayas berrylike",
+        (
+            "berry berries strawberry stawberry fresa raspberry rasberry blueberry "  # codespell:ignore stawberry,rasberry
+            "blackberry mora cranberry currant boysenberry mulberry gooseberry bayas berrylike"
+        ),
     ),
     ("Fruity: dried fruit", "raisin rasin prune date fig sultana pasa"),
     (
         "Fruity: citrus",
-        "citrus citric citrico orange mandarin tangerine lemon lemonade lime "
-        "limonario limon naranja grapefruit yuzu kumquat clementine pomelo bergamot",
+        (
+            "citrus citric citrico orange mandarin tangerine lemon lemonade lime "
+            "limonario limon naranja grapefruit yuzu kumquat clementine pomelo bergamot"
+        ),
     ),
     (
         "Fruity: other fruit",
-        "fruit fruity fruta frutas apricot albaricoque peach melocoton durazno "
-        "plum ciruela cherry cherries mango apple manzana pear grape grapes uva muscat pineapple "
-        "papaya lychee melon honeydew cantaloupe watermelon passion nectarine guava kiwi banana "
-        "tamarind coconut pomegranate persimmon starfruit carambola mangostine nance rhubarb quince jam jammy",
+        (
+            "fruit fruity fruta frutas apricot albaricoque peach melocoton durazno "
+            "plum ciruela cherry cherries mango apple manzana pear grape grapes uva muscat pineapple "
+            "papaya lychee melon honeydew cantaloupe watermelon passion nectarine guava kiwi banana "
+            "tamarind coconut pomegranate persimmon starfruit carambola mangostine nance rhubarb quince jam jammy"
+        ),
     ),
     ("Green & herbal", "herb herbal mint basil lemongrass tomato olive savory umami"),
     (
         "Fermented & winey",
-        "wine winey rum whisky whiskey liquor fermented brandy cognac boozy "
-        "port funky balsamic hops yogurt",
+        (
+            "wine winey rum whisky whiskey liquor fermented brandy cognac boozy "
+            "port funky balsamic hops yogurt"
+        ),
     ),
     (
         "Spices",
@@ -55,13 +65,17 @@ WORDS = [  # (family, keywords), first match wins
     ("Roasted", "malt malta roast tobacco cereal toast"),
     (
         "Cocoa & nutty",
-        "chocolate cocoa cacao nut nuts nutty almond hazelnut peanut peanuts "
-        "walnut pecan macadamia praline",
+        (
+            "chocolate cocoa cacao nut nuts nutty almond hazelnut peanut peanuts "
+            "walnut pecan macadamia praline"
+        ),
     ),
     (
         "Sweet",
-        "sweet caramel caramelized caramelo honey honeywater miel sugar sugarcane azucar "
-        "molasses vanilla syrup maple toffee panela candy butterscotch marshmallow nougat cola",
+        (
+            "sweet caramel caramelized caramelo honey honeywater miel sugar sugarcane azucar "
+            "molasses vanilla syrup maple toffee panela candy butterscotch marshmallow nougat cola"
+        ),
     ),
 ]
 WORDS = [(f, set(k.split())) for f, k in WORDS]

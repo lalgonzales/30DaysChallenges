@@ -226,9 +226,9 @@ south = north + pop_transform.e * pop.shape[0]
 reachable = np.isfinite(minutes)
 cells = {
     int(r * pop.shape[1] + c): (
-        [round(float(m), 1), int(round(p)), int(local[s])]
+        [round(float(m), 1), round(float(p)), int(local[s])]
         if ok
-        else [-1, int(round(p)), -1]
+        else [-1, round(float(p)), -1]
     )
     for r, c, m, p, s, ok in zip(rows, cols, minutes, people, start, reachable)
 }
@@ -370,12 +370,12 @@ def legend_html(text: dict) -> str:
 @media (max-width:600px) {{.d13 {{max-width:none; left:12px; font-size:12px}}}}
 </style>
 <div class="d13">
-  <h1>{text['title']}</h1>
-  <p>{text['lead']}</p>
-  <b>{text['legend']}</b>{rows_html}
-  <div><span style="background:{PARK}"></span>{text['park']}</div>
+  <h1>{text["title"]}</h1>
+  <p>{text["lead"]}</p>
+  <b>{text["legend"]}</b>{rows_html}
+  <div><span style="background:{PARK}"></span>{text["park"]}</div>
   <div id="d13-result"></div>
-  <small>{text['credits']}</small>
+  <small>{text["credits"]}</small>
 </div>"""
 
 

@@ -433,9 +433,7 @@ def draw_map(lang: str) -> plt.Figure:
     draw_inset(fig, text, lang)
     add_scale_bar(ax, loc="lower right", color=MUTED, share=0.15)
     add_north_arrow(ax, xy=(0.95, 0.95), color=MUTED, size=0.05)
-    fig.text(
-        0.035, 0.018, text["credits"], color=MUTED, fontsize=8, linespacing=1.5
-    )
+    fig.text(0.035, 0.018, text["credits"], color=MUTED, fontsize=8, linespacing=1.5)
     return fig
 
 

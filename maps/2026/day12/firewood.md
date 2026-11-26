@@ -100,7 +100,10 @@ def volume_urls() -> list[str]:
 def read_volume(pdf: Path) -> dict | None:
     """The department code and the municipality's row of table 12, or None."""
     text = subprocess.run(
-        ["pdftotext", "-layout", str(pdf), "-"], capture_output=True, text=True
+        ["pdftotext", "-layout", str(pdf), "-"],
+        capture_output=True,
+        text=True,
+        check=True,
     ).stdout
     head = text[:4000]
     if "CENSO DE POBLACI" not in head.upper() or "2013" not in head:
