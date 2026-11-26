@@ -78,9 +78,11 @@ def add_north_arrow(
         xy=(x, y),
         xytext=(x, y - size),
         xycoords="axes fraction",
-        arrowprops=dict(
-            arrowstyle="-|>,head_width=0.4,head_length=0.8", color=color, lw=1.5
-        ),
+        arrowprops={
+            "arrowstyle": "-|>,head_width=0.4,head_length=0.8",
+            "color": color,
+            "lw": 1.5,
+        },
     )
     ax.text(
         x,

@@ -60,9 +60,9 @@ CRS = "EPSG:8857"  # Equal Earth: every cell keeps its true area
 with zipfile.ZipFile(io.BytesIO(urlopen(DMS_URL).read())) as archive:
     names = sorted(archive.namelist())
     dms = {
-        name.split("_")[-1]
-        .removesuffix(".csv"): pd.read_csv(archive.open(name), header=None)
-        .to_numpy(float)
+        name.split("_")[-1].removesuffix(".csv"): pd.read_csv(
+            archive.open(name), header=None
+        ).to_numpy(float)
         for name in names
     }
 print(sorted(dms), dms["JAN"].shape)

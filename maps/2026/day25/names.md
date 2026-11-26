@@ -85,7 +85,9 @@ by_pop = municipalities.sort_values("pop", ascending=False)
 share = by_pop["pop"].cumsum() / by_pop["pop"].sum()
 HALF = int((share < 0.5).sum()) + 1
 half_area = by_pop["km2"].iloc[:HALF].sum() / municipalities["km2"].sum()
-print(f"Half of the people live in {HALF} of 298 municipalities, {half_area:.0%} of the land")
+print(
+    f"Half of the people live in {HALF} of 298 municipalities, {half_area:.0%} of the land"
+)
 ```
 
 ## Placing the names
@@ -113,7 +115,9 @@ def two_lines(name: str) -> str:
     words = name.split(" ")
     if len(words) == 1:
         return name
-    return " ".join(words[: len(words) // 2]) + "\n" + " ".join(words[len(words) // 2 :])
+    return (
+        " ".join(words[: len(words) // 2]) + "\n" + " ".join(words[len(words) // 2 :])
+    )
 
 
 def candidates(geom, rng, n: int = 600) -> list[Point]:
@@ -154,8 +158,15 @@ def place_names(ax) -> int:
     for row in by_pop.itertuples():
         pt = size(row.pop)
         text = ax.text(
-            0, 0, row.nombre, ha="center", va="center", color=INK, linespacing=0.9,
-            alpha=0.4 + 0.6 * min(1, pt / 15), weight="bold" if pt > 12 else "normal",
+            0,
+            0,
+            row.nombre,
+            ha="center",
+            va="center",
+            color=INK,
+            linespacing=0.9,
+            alpha=0.4 + 0.6 * min(1, pt / 15),
+            weight="bold" if pt > 12 else "normal",
         )
         points = candidates(row.geometry, rng)
         tries = [
@@ -223,7 +234,9 @@ def draw_map(lang: str) -> tuple[plt.Figure, int]:
     ax.set_ylim(y0, y1)
     ax.set_aspect("equal")
     overlaps = place_names(ax)
-    fig.text(0.03, 0.965, text["title"], fontsize=34, color=INK, va="top", weight="bold")
+    fig.text(
+        0.03, 0.965, text["title"], fontsize=34, color=INK, va="top", weight="bold"
+    )
     fig.text(0.03, 0.91, text["subtitle"], fontsize=15, color=INK_2, va="top")
     fig.text(0.03, 0.015, text["credits"], fontsize=8.5, color=INK_2)
     return fig, overlaps
