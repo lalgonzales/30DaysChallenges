@@ -22,7 +22,7 @@ listing:
     image-height: 180px
 ---
 
-Maps and charts with Honduran data, made for the [#30DayMapChallenge](https://30daymapchallenge.com/) (November) and the [#30DayChartChallenge](https://30daychartchallenge.org/) (April). Each page is the notebook behind the map or chart, with its sources.
+Maps and charts with open data, from Honduras and beyond, made for the [#30DayMapChallenge](https://30daymapchallenge.com/) (November) and the [#30DayChartChallenge](https://30daychartchallenge.org/) (April). Each page is the notebook behind the map or chart, with its sources.
 
 ## Maps 2026
 
