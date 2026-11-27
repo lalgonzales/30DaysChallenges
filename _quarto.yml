@@ -18,7 +18,7 @@ execute:
 
 website:
   title: "30 Days Challenges"
-  description: "Maps and charts with Honduran data, one a day."
+  description: "Maps and charts made one a day for the #30DayMapChallenge and #30DayChartChallenge, with open data from Honduras and beyond, each with its notebook and sources."
   site-url: https://lalgonzales.github.io/30DaysChallenges/
   image: preview.png
   open-graph: true
