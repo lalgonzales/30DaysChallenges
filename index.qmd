@@ -1,6 +1,7 @@
 ---
 title: "30 Days Challenges"
 toc: false
+image: preview.png
 listing:
   - id: maps-2026
     contents:
